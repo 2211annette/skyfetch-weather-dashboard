@@ -84,3 +84,84 @@ h1 {
     width: 100px;
     height: 100px;
 }
+
+/* Style the search section */
+.search-section {
+  margin-bottom: 30px;
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+
+/* Style the city input */
+#city-input {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 2px solid #ddd;
+  flex: 1;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+#city-input:focus {
+  border-color: #4facfe;
+}
+
+/* Style the search button */
+#search-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+#search-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+#search-btn:active {
+  transform: translateY(0);
+}
+.error-message {
+  background: #fdecea;        /* light red / pink */
+  color: #b00020;             /* dark red */
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 5px solid #d32f2f;
+  margin-top: 15px;
+  font-size: 0.95rem;
+}
+
+/* Spinner */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+/* Spin animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading container */
+.loading-container {
+  text-align: center;
+  margin-top: 20px;
+}

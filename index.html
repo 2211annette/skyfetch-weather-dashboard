@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkyFetch - Weather Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <h1>🌤️ SkyFetch</h1>
         <p class="tagline">Your Personal Weather Dashboard</p>
+
+        <!-- Add this BEFORE the #weather-display div -->
+
+        <div class="search-section">
+            <input type="text" id="city-input" placeholder="Enter city name...">
+            <button id="search-btn">Search</button> 
+        </div>
         
         <div id="weather-display">
             <p class="loading">Loading weather data...</p>
@@ -18,8 +27,9 @@
 
     <!-- Axios CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
+
     <!-- Your JavaScript -->
     <script src="app.js"></script>
 </body>
+
 </html>
