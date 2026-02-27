@@ -13,6 +13,16 @@ function WeatherApp(API_KEY){
     this.cityInput = document.getElementById('city-input');
     this.weatherDisplay = document.getElementById('weather-display');
 
+    
+    this.recentSearchesSection = document.getElementById('recent-searches-section');
+    this.recentSearchesContainer = document.getElementById('recent-searches-container');
+    
+    // TODO: Initialize recent searches array
+    this.recentSearches = [];
+    
+    // TODO: Set maximum number of recent searches to save
+    this.maxRecentSearches = 5;
+
     this.init();
 }
 
@@ -38,6 +48,10 @@ WeatherApp.prototype.getWeather = async function (city) {
 
     // Display forecast
     this.displayForecast(forecastData);
+
+    this.saveRecentSearch(city);
+        
+    localStorage.setItem('lastCity', city);
 
   } catch (error) {
     console.error('Error:', error);
@@ -121,9 +135,18 @@ WeatherApp.prototype.init = function () {
       this.handleSearch();
     }
   }.bind(this));
-
+ 
+  const clearBtn = document.getElementById('clear-history-btn');
+  if (clearBtn) {
+     clearBtn.addEventListener('click', this.clearHistory.bind(this));
+    }
   // Show welcome message on load
   this.showWelcome();
+
+
+  this.loadRecentSearches();
+    
+  this.loadLastCity();
 };
 
 // getWeather('Tokyo');
@@ -218,4 +241,101 @@ WeatherApp.prototype.displayForecast = function (data) {
   this.weatherDisplay.innerHTML += forecastSection;
 };
 
+WeatherApp.prototype.loadRecentSearches = function () {
+  // Get recent searches from localStorage
+  const saved = localStorage.getItem('recentSearches');
+
+  // Parse and store if data exists
+  if (saved) {
+    this.recentSearches = JSON.parse(saved);
+  } else {
+    this.recentSearches = [];
+  }
+
+  // Display the recent searches
+  this.displayRecentSearches();
+};
+
+WeatherApp.prototype.saveRecentSearch = function (city) {
+  // Convert city to title case for consistency
+  const cityName =
+    city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+
+  // Remove existing occurrence (if any)
+  const index = this.recentSearches.indexOf(cityName);
+  if (index > -1) {
+    this.recentSearches.splice(index, 1);
+  }
+
+  // Add to the beginning
+  this.recentSearches.unshift(cityName);
+
+  // Keep only the last N searches
+  if (this.recentSearches.length > this.maxRecentSearches) {
+    this.recentSearches.pop();
+  }
+
+  // Save to localStorage
+  localStorage.setItem(
+    'recentSearches',
+    JSON.stringify(this.recentSearches)
+  );
+
+  // Update display
+  this.displayRecentSearches();
+};
+
+// Create displayRecentSearches method
+WeatherApp.prototype.displayRecentSearches = function () {
+  // Clear existing buttons
+  this.recentSearchesContainer.innerHTML = '';
+
+  // Hide section if no recent searches
+  if (this.recentSearches.length === 0) {
+    this.recentSearchesSection.style.display = 'none';
+    return;
+  }
+
+  // Show section
+  this.recentSearchesSection.style.display = 'block';
+
+  // Create a button for each recent search
+  this.recentSearches.forEach(function (city) {
+    const btn = document.createElement('button');
+    btn.className = 'recent-search-btn';
+    btn.textContent = city;
+
+    // Click handler
+    btn.addEventListener('click', function () {
+      this.cityInput.value = city;
+      this.getWeather(city);
+    }.bind(this));
+
+    this.recentSearchesContainer.appendChild(btn);
+  }.bind(this));
+};
+
+// TODO: Create loadLastCity method
+WeatherApp.prototype.loadLastCity = function() {
+    // TODO: Get last city from localStorage
+    const lastCity = localStorage.getItem('lastCity');
+    
+    // TODO: If exists, fetch weather for that city
+    if (lastCity) {
+         this.getWeather(lastCity);
+     } else {
+         // TODO: Show welcome message if no last city
+         this.showWelcome();
+     }
+};
+
+// Create clearHistory method
+WeatherApp.prototype.clearHistory = function () {
+  // Confirm with user
+  if (confirm('Clear all recent searches?')) {
+    this.recentSearches = [];
+    localStorage.removeItem('recentSearches');
+    this.displayRecentSearches();
+  }
+};
 const app = new WeatherApp(API_KEY);
